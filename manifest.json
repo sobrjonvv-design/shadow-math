@@ -1,0 +1,9 @@
+{
+  "name": "Shadow Math: Samurai Zen",
+  "short_name": "ShadowMath",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}

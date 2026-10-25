@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SHADOW MATH: Samurai Zen Edition</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Complete Offline Utility Fallback + Core Styling for Standalone Android APK */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background-color: #020202; color: #FAFAFA;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      user-select: none; -webkit-user-select: none;
+    }
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .flex-1 { flex: 1 1 0%; }
+    .flex-shrink-0 { flex-shrink: 0; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .gap-1 { gap: 0.25rem; }
+    .gap-1\.5 { gap: 0.375rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-2\.5 { gap: 0.625rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-5 { gap: 1.25rem; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .w-\[72\%\] { width: 72%; }
+    .w-\[28\%\] { width: 28%; }
+    .w-\[68\%\] { width: 68%; }
+    .w-\[32\%\] { width: 32%; }
+    .w-\[45\%\] { width: 45%; }
+    .w-\[55\%\] { width: 55%; }
+    .w-1\/2 { width: 50%; }
+    .overflow-hidden { overflow: hidden; }
+    .overflow-y-auto { overflow-y: auto; }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .uppercase { text-transform: uppercase; }
+    .font-bold { font-weight: 700; }
+    .font-black { font-weight: 900; }
+    .text-xs { font-size: 0.75rem; line-height: 1rem; }
+    .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+    .text-base { font-size: 1rem; line-height: 1.5rem; }
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+    .bg-black { background-color: #000000; }
+    .bg-white { background-color: #FFFFFF; }
+    .text-white { color: #FFFFFF; }
+    .text-black { color: #000000; }
+    .text-neutral-300 { color: #d4d4d4; }
+    .text-neutral-400 { color: #a3a3a3; }
+    .text-neutral-500 { color: #737373; }
+    .rounded { border-radius: 0.25rem; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-2xl { border-radius: 1rem; }
+    .rounded-full { border-radius: 9999px; }
+    .p-1 { padding: 0.25rem; }
+    .p-2 { padding: 0.5rem; }
+    .p-2\.5 { padding: 0.625rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .border { border: 1px solid rgba(255,255,255,0.25); }
+    .border-r { border-right: 1px solid rgba(255,255,255,0.2); }
+    .border-b { border-bottom: 1px solid rgba(255,255,255,0.2); }
+    button { cursor: pointer; font-family: inherit; }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2); }
+      50% { box-shadow: 0 0 18px rgba(255,255,255,0.85), inset 0 0 12px rgba(255,255,255,0.4); }
+    }
+    .active-node-glow { animation: pulseGlow 2s infinite; border-color: #ffffff !important; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #050505; }
+    ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 3px; }
+
+    .sf-key {
+      background: linear-gradient(180deg, #161616 0%, #060606 100%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 3px 0 #000000, inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: transform 0.05s ease, background 0.08s ease;
+    }
+    .sf-key:active {
+      transform: translateY(2px);
+      background: #ffffff;
+      color: #000000;
+    }
+    .sf-strike-btn {
+      background: linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%);
+      color: #000000;
+      border: 1px solid #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.45);
+    }
+    .sf-strike-btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body class="w-full h-full bg-black text-white flex flex-col overflow-hidden">
+
+  <!-- FULLSCREEN ANDROID LANDSCAPE CONTAINER -->
+  <div id="gameFrame" class="relative w-full h-full bg-black overflow-hidden flex flex-col">
+
+    <!-- ================= TOP NAVIGATION BAR ================= -->
+    <header class="relative z-30 h-12 bg-[#060606] border-b px-3 flex items-center justify-between gap-2 flex-shrink-0" style="height: 48px;">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-black text-sm" style="width:32px;height:32px;">
+          侍
+        </div>
+        <div>
+          <span id="topWeaponBadge" class="text-xs font-black uppercase text-white block">Черная Катана [Ур.1/25]</span>
+          <span class="text-xs text-neutral-400">
+            Упрощение: <b id="topDiscountVal" class="text-white">-0.18</b> • Кап: <b id="topCapVal" class="text-white">1.8</b>
+          </span>
+        </div>
+      </div>
+
+      <nav class="flex items-center bg-black p-1 rounded-xl border gap-1">
+        <button id="navBtnDuel" onclick="setScreen('duel')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase bg-white text-black">
+          ⚔️ БОЙ
+        </button>
+        <button id="navBtnMap" onclick="setScreen('map')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase bg-black text-neutral-300">
+          🗼 БАШНЯ (25)
+        </button>
+        <button id="navBtnShop" onclick="setScreen('shop')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase bg-black text-neutral-300">
+          🗡️ ОРУЖЕЙНАЯ (10)
+        </button>
+        <button id="navBtnLan" onclick="setScreen('lan')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase bg-black text-neutral-300">
+          📡 LAN PVP
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5 bg-white text-black px-3 py-1 rounded-lg text-xs font-black">
+          <span>印</span>
+          <span id="topSealsCount">650</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= SCREEN 1: COMBAT ARENA ================= -->
+    <section id="screenDuel" class="relative z-10 flex-1 flex overflow-hidden bg-black">
+      <div class="w-[72%] h-full relative flex flex-col justify-between overflow-hidden border-r">
+        <canvas id="shadowFightCanvas" class="absolute inset-0 w-full h-full z-0"></canvas>
+
+        <!-- Fighter Health Bars + Math Scroll -->
+        <div class="relative z-20 px-4 pt-2 flex flex-col gap-1.5" style="background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%);">
+          <div class="flex items-center gap-3">
+            <div class="flex-1">
+              <div class="flex items-center justify-between" style="margin-bottom:4px;">
+                <span class="text-xs font-black uppercase text-white">ТЕНЬ КЭНСЭЯ</span>
+                <span id="uiPlayerHpText" class="text-xs font-bold text-neutral-300">350 / 350</span>
+              </div>
+              <div class="w-full border p-0.5 rounded" style="height:14px;background:#000;">
+                <div id="uiPlayerHpBar" class="h-full bg-white" style="width: 100%; transition: width 0.2s;"></div>
+              </div>
+            </div>
+
+            <div class="flex flex-col items-center flex-shrink-0 px-1">
+              <div class="rounded-full bg-black border flex items-center justify-center" style="width:38px;height:38px;border-width:2px;">
+                <svg id="uiYinYangIcon" style="width:30px;height:30px;transition:transform 0.4s;" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="48" fill="#000" stroke="#fff" stroke-width="4"/>
+                  <path d="M50,2 A48,48 0 0,1 50,98 A24,24 0 0,1 50,50 A24,24 0 0,0 50,2 Z" fill="#fff"/>
+                  <circle cx="50" cy="26" r="6" fill="#fff"/>
+                  <circle cx="50" cy="74" r="6" fill="#000"/>
+                </svg>
+              </div>
+              <span id="uiRoundTimerText" class="text-xs font-black text-white">5.5s</span>
+            </div>
+
+            <div class="flex-1">
+              <div class="flex items-center justify-between" style="margin-bottom:4px;">
+                <span id="uiBossHpText" class="text-xs font-bold text-neutral-300">310 / 310</span>
+                <span id="uiBossNameText" class="text-xs font-black uppercase text-white">НОЧНОЙ ДОЗОРНЫЙ</span>
+              </div>
+              <div class="w-full border p-0.5 rounded" style="height:14px;background:#000;">
+                <div id="uiBossHpBar" class="h-full bg-white" style="width: 100%; margin-left:auto; transition: width 0.2s;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full rounded-full overflow-hidden" style="height:4px;background:#1a1a1a;">
+            <div id="uiTimerBarFill" class="h-full bg-white" style="width: 100%;"></div>
+          </div>
+
+          <!-- Math Problem Scroll -->
+          <div class="w-full border rounded-xl px-4 py-2 flex items-center justify-between" style="max-width:440px;margin:4px auto 0;background:rgba(0,0,0,0.88);">
+            <div>
+              <span class="text-xs uppercase text-neutral-400 block">КОНЦЕНТРАЦИЯ ДЗЕН:</span>
+              <div id="uiMathEquation" class="text-2xl font-black text-white">18 × 4 = ?</div>
+            </div>
+            <div class="px-4 py-1.5 border rounded-lg text-center" style="min-width:92px;background:#080808;border-width:2px;border-color:#fff;">
+              <span id="uiAnswerBox" class="text-2xl font-black text-white">_</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="uiCombatCallout" class="relative z-20 text-center" style="margin:auto;opacity:0;transition:opacity 0.2s;pointer-events:none;">
+          <div id="uiCombatCalloutText" class="px-4 py-1.5 bg-white text-black font-black text-base uppercase rounded">
+            РАССЕЧЕНИЕ!
+          </div>
+        </div>
+
+        <div class="relative z-20 px-4 py-2 flex items-center justify-between text-xs text-neutral-400" style="background:linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);">
+          <span id="uiArenaLocationLabel">⛩️ АКТ I • ЭТАЖ 4 ИЗ 25</span>
+          <span id="uiWeaponBuffLabel" class="text-white">Множитель: ×1.75</span>
+        </div>
+
+        <!-- Ink Stun Modal -->
+        <div id="uiInkStunModal" class="absolute inset-0 z-40 flex flex-col items-center justify-center p-4 text-center" style="background:rgba(0,0,0,0.95);opacity:0;pointer-events:none;transition:opacity 0.2s;">
+          <h3 class="text-lg font-black uppercase text-white">ОСЛЕПЛЕНИЕ ЧЕРНОЙ ТУШЬЮ!</h3>
+          <p class="text-xs text-neutral-400" style="margin:6px 0 12px;">Ошибка в расчете открыла защиту. Стан на 2.0 сек.</p>
+          <div class="border rounded-full overflow-hidden" style="width:180px;height:8px;background:#111;">
+            <div id="uiStunBar" class="h-full bg-white" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT 28%: TACTICAL NUMPAD -->
+      <div class="w-[28%] h-full p-3 flex flex-col justify-between z-20" style="background:#050505;">
+        <div class="flex items-center justify-between border-b" style="padding-bottom:6px;">
+          <span class="text-xs font-bold uppercase text-neutral-400">ТАКТИЧЕСКИЙ NUMPAD</span>
+          <span id="uiBossLevelTag" class="text-xs font-bold text-white">УР. 4</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2" style="margin:auto 0;">
+          <button onclick="pressKey('7')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">7</button>
+          <button onclick="pressKey('8')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">8</button>
+          <button onclick="pressKey('9')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">9</button>
+
+          <button onclick="pressKey('4')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">4</button>
+          <button onclick="pressKey('5')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">5</button>
+          <button onclick="pressKey('6')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">6</button>
+
+          <button onclick="pressKey('1')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">1</button>
+          <button onclick="pressKey('2')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">2</button>
+          <button onclick="pressKey('3')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">3</button>
+
+          <button onclick="clearKeys()" class="sf-key rounded-xl text-xs font-bold uppercase text-neutral-300 flex items-center justify-center" style="height:46px;">СБРОС</button>
+          <button onclick="pressKey('0')" class="sf-key rounded-xl text-xl font-black text-white flex items-center justify-center" style="height:46px;">0</button>
+          <button onclick="backspaceKey()" class="sf-key rounded-xl text-lg font-bold text-neutral-300 flex items-center justify-center" style="height:46px;">⌫</button>
+        </div>
+
+        <button onclick="submitStrike()" class="sf-strike-btn w-full rounded-xl text-sm font-black uppercase flex items-center justify-center" style="height:46px;">
+          ⚔️ НАНЕСТИ УДАР
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 2: 25-LEVEL CAMPAIGN TOWER ================= -->
+    <section id="screenMap" class="relative z-10 flex-1 flex overflow-hidden hidden" style="background:#030303;">
+      <div class="w-[68%] h-full flex flex-col border-r">
+        <div class="p-2.5 border-b flex items-center justify-between gap-1.5" style="background:#080808;">
+          <div id="actTabsContainer" class="flex items-center gap-1.5 flex-1"></div>
+          <span id="mapTotalProgress" class="px-2 py-1 border rounded text-xs text-white">3 / 25</span>
+        </div>
+        <div id="towerListContainer" class="flex-1 overflow-y-auto p-3 flex flex-col gap-2"></div>
+      </div>
+
+      <div class="w-[32%] h-full p-3.5 flex flex-col justify-between" style="background:#050505;">
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between border-b" style="padding-bottom:6px;">
+            <span id="dossierFloorTag" class="px-2 py-1 bg-white text-black text-xs font-black uppercase rounded">УРОВЕНЬ 4 / 25</span>
+            <span id="dossierRewardTag" class="text-xs text-white font-bold">+100 印</span>
+          </div>
+
+          <div class="relative w-full rounded-xl bg-black border overflow-hidden flex items-center justify-center" style="height:150px;">
+            <canvas id="mapBossPortraitCanvas" width="280" height="150" class="w-full h-full"></canvas>
+            <div class="absolute flex justify-between items-center" style="bottom:6px;left:10px;right:10px;">
+              <span id="dossierStars" class="text-xs text-white">★★☆☆☆</span>
+              <span id="dossierStatus" class="px-2 py-0.5 bg-black border rounded text-xs text-white">ВЫЗОВ</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 id="dossierName" class="text-base font-black uppercase text-white">Ночной Дозорный</h3>
+            <p id="dossierTitle" class="text-xs text-neutral-400">Охотник с Сай • Ур. 4</p>
+            <p id="dossierLore" class="text-xs text-neutral-300 p-2 rounded border" style="margin-top:4px;background:#0a0a0a;"></p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-1.5 text-xs">
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">ЗДОРОВЬЕ</span>
+              <span id="dossierHp" class="text-white font-bold">310 HP</span>
+            </div>
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">ТАЙМЕР АТАКИ</span>
+              <span id="dossierSpeed" class="text-white font-bold">4.6 сек</span>
+            </div>
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">УРОН</span>
+              <span id="dossierDmg" class="text-white font-bold">28 ед.</span>
+            </div>
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">СЛОЖНОСТЬ</span>
+              <span id="dossierDiff" class="text-white font-bold">2.5</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="launchSelectedLevel()" class="sf-strike-btn w-full py-2.5 rounded-xl text-xs font-black uppercase">
+          ⚔️ ВСТУПИТЬ В ПОЕДИНОК
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 3: ARMORY (10 WEAPONS • LVL 25) ================= -->
+    <section id="screenShop" class="relative z-10 flex-1 flex overflow-hidden hidden" style="background:#030303;">
+      <div class="w-[45%] h-full border-r p-3.5 flex flex-col justify-between" style="background:#050505;">
+        <div class="flex items-center justify-between border-b" style="padding-bottom:6px;">
+          <div>
+            <span id="armoryClassTag" class="text-xs text-neutral-400 uppercase block">КЛАСС</span>
+            <h2 id="armoryWeaponTitle" class="text-base font-black uppercase text-white">Черная Катана</h2>
+          </div>
+          <span id="armoryLevelBadge" class="px-2 py-1 bg-white text-black text-xs font-black rounded">УР. 1 / 25</span>
+        </div>
+
+        <div class="relative w-full rounded-xl bg-black border overflow-hidden" style="height:165px;">
+          <canvas id="armoryDemoCanvas" width="360" height="165" class="w-full h-full"></canvas>
+          <button onclick="triggerArmoryDemoStrike()" class="absolute px-2.5 py-1 bg-white text-black text-xs font-black uppercase rounded" style="bottom:8px;right:8px;">
+            ▶ Удар Самурая
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-1.5 text-xs">
+          <p id="armoryWeaponDesc" class="text-neutral-300 p-2 rounded border" style="background:#0a0a0a;"></p>
+          <div class="grid grid-cols-3 gap-1.5">
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">УРОН</span>
+              <span id="armoryStatDmg" class="text-white font-bold">46 ед.</span>
+            </div>
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">УПРОЩЕНИЕ</span>
+              <span id="armoryStatSimp" class="text-white font-bold">-0.18</span>
+            </div>
+            <div class="border p-1.5 rounded" style="background:#0a0a0a;">
+              <span class="text-neutral-500 block">КАП</span>
+              <span id="armoryStatCap" class="text-white font-bold">1.8</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="armoryActionRow" class="flex gap-2"></div>
+      </div>
+
+      <div class="w-[55%] h-full p-3.5 flex flex-col bg-black">
+        <div class="flex items-center justify-between" style="margin-bottom:8px;">
+          <span class="text-xs font-bold uppercase text-neutral-400">АРСЕНАЛ ТЕНИ (ДО 25 УРОВНЯ)</span>
+        </div>
+        <div id="armoryGridContainer" class="flex-1 overflow-y-auto grid grid-cols-2 gap-2"></div>
+      </div>
+    </section>
+
+    <!-- ================= SCREEN 4: LAN PVP ================= -->
+    <section id="screenLan" class="relative z-10 flex-1 flex p-4 gap-5 overflow-hidden hidden" style="background:#030303;">
+      <div class="w-1/2 border rounded-2xl p-4 flex flex-col justify-between" style="background:#070707;">
+        <div>
+          <span class="px-2 py-1 bg-white text-black text-xs font-black uppercase rounded">UDP BROADCAST : ПОРТ 47777</span>
+          <h3 class="text-base font-black uppercase text-white" style="margin-top:10px;">СОЗДАТЬ ДОДЗЁ (HOST)</h3>
+          <p class="text-xs text-neutral-400" style="margin-top:4px;">Рассылка пакетов в локальную сеть Wi-Fi / Hotspot.</p>
+          <div style="margin-top:14px;">
+            <label class="text-xs text-neutral-400 block">ИМЯ ДОДЗЁ:</label>
+            <input id="lanRoomName" type="text" value="Цитадель Тени #1" class="w-full bg-black border rounded-lg px-3 py-2 text-xs text-white" style="margin-top:4px;"/>
+          </div>
+        </div>
+        <button onclick="startLanHostSim()" class="sf-strike-btn w-full py-3 rounded-xl text-xs font-black uppercase">
+          📡 ЗАПУСТИТЬ ХОСТ
+        </button>
+      </div>
+
+      <div class="w-1/2 border rounded-2xl p-4 flex flex-col justify-between" style="background:#070707;">
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <h3 class="text-base font-black uppercase text-white">ДОСТУПНЫЕ БОИ</h3>
+            <span class="text-xs text-neutral-400">● Сканирование...</span>
+          </div>
+          <div class="p-3 bg-black border rounded-xl flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-white">Мастер Кэнсэй [192.168.1.104:7777]</div>
+              <div class="text-xs text-neutral-400">Кусаригама [Ур. 14/25] • 3 мс</div>
+            </div>
+            <button onclick="setScreen('duel')" class="px-3 py-1.5 bg-white text-black text-xs font-black rounded uppercase">В БОЙ</button>
+          </div>
+        </div>
+        <div id="lanStatusLog" class="p-2.5 bg-black border rounded-lg text-xs text-neutral-400">
+          [UnityTransport] Готов к синхронизации по Wi-Fi.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // Haptic Vibration Helper for Android APK
+    function vibratePhone(ms) {
+      try {
+        if (window.AndroidBridge && window.AndroidBridge.vibrate) {
+          window.AndroidBridge.vibrate(ms);
+        } else if (navigator.vibrate) {
+          navigator.vibrate(ms);
+        }
+      } catch (e) {}
+    }
+
+    const weapons = [
+      { id: "Katana", name: "Черная Катана", category: "КЛИНОК СИНКЭН", baseDmg: 45, growthPct: 0.025, simpFactor: 0.18, minCap: 1.8, level: 1, maxLevel: 25, baseCost: 0, stepCost: 30, isUnlocked: true, desc: "Классический клинок самурая. Плавное снижение сложности примеров." },
+      { id: "BoStaff", name: "Посох Белого Лотоса", category: "ДРЕВКОВОЕ ОРУЖИЕ", baseDmg: 42, growthPct: 0.022, simpFactor: 0.26, minCap: 1.5, level: 1, maxLevel: 25, baseCost: 80, stepCost: 35, isUnlocked: true, desc: "Длинный боевой шест. Сильнее всего упрощает умножение и деление." },
+      { id: "TessenFan", name: "Боевой Веер Тэссэн", category: "ОРУЖИЕ КАЛЛИГРАФА", baseDmg: 50, growthPct: 0.028, simpFactor: 0.22, minCap: 2.0, level: 0, maxLevel: 25, baseCost: 150, stepCost: 45, isUnlocked: false, desc: "Стальной веер. Рассеивает туман разума и уменьшает разрядность чисел." },
+      { id: "TekkoClaws", name: "Когти Тэкко-Каги", category: "ПАРНОЕ ОРУЖИЕ ТЕНИ", baseDmg: 62, growthPct: 0.032, simpFactor: 0.16, minCap: 2.5, level: 0, maxLevel: 25, baseCost: 240, stepCost: 55, isUnlocked: false, desc: "Железные когти ниндзя. Молниеносные двойные удары." },
+      { id: "Kusarigama", name: "Кусаригама Затмения", category: "ЦЕПНОЙ СЕРП", baseDmg: 58, growthPct: 0.030, simpFactor: 0.24, minCap: 1.9, level: 0, maxLevel: 25, baseCost: 350, stepCost: 65, isUnlocked: false, desc: "Серп на длинной цепи. Держит босса на дистанции." },
+      { id: "Naginata", name: "Нагината Журавля", category: "АЛЕБАРДА СЁГУНАТА", baseDmg: 56, growthPct: 0.028, simpFactor: 0.25, minCap: 1.7, level: 0, maxLevel: 25, baseCost: 480, stepCost: 75, isUnlocked: false, desc: "Изогнутое лезвие на древке. Высокий контроль сложности." },
+      { id: "TwinSai", name: "Парные Сай Равновесия", category: "ТРЕЗУБЦЫ ИНЬ-ЯН", baseDmg: 54, growthPct: 0.026, simpFactor: 0.23, minCap: 1.9, level: 0, maxLevel: 25, baseCost: 620, stepCost: 85, isUnlocked: false, desc: "Парные кинжалы-трезубцы для молниеносных контратак." },
+      { id: "Odachi", name: "Великий Одати Пустоты", category: "ДВУРУЧНЫЙ МЕЧ", baseDmg: 80, growthPct: 0.038, simpFactor: 0.14, minCap: 3.2, level: 0, maxLevel: 25, baseCost: 800, stepCost: 110, isUnlocked: false, desc: "Тяжелый двуручный меч. Колоссальный урон." },
+      { id: "ShurikenStorm", name: "Сюрикены Восьми Ветров", category: "МЕТАТЕЛЬНЫЕ ЗВЕЗДЫ", baseDmg: 66, growthPct: 0.032, simpFactor: 0.22, minCap: 2.1, level: 0, maxLevel: 25, baseCost: 1050, stepCost: 130, isUnlocked: false, desc: "Крупные боевые звезды Суми-э." },
+      { id: "KamaYari", name: "Кама-Яри Патриарха", category: "РЕЛИКВИЯ ТИТАНА", baseDmg: 92, growthPct: 0.042, simpFactor: 0.30, minCap: 1.8, level: 0, maxLevel: 25, baseCost: 1500, stepCost: 160, isUnlocked: false, desc: "Легендарное крестообразное копье гранд-мастера Дзен." }
+    ];
+
+    const actNames = [
+      "АКТ I: БАМБУКОВАЯ РОЩА",
+      "АКТ II: ХРАМ КАЛЛИГРАФА",
+      "АКТ III: КУЗНИЦА ТЕНИ",
+      "АКТ IV: БАШНЯ ВЕТРОВ",
+      "АКТ V: ЦИТАДЕЛЬ ЗАТМЕНИЯ"
+    ];
+
+    const levels = [
+      { id: 0, act: 0, name: "Тень Послушника", title: "Страж Рощи • Ур. 1", weapon: "BoStaff", helmet: "cone", hp: 140, dmg: 16, speed: 5.5, reward: 50, stars: "★☆☆☆☆", defeated: true, lore: "Первый защитник бамбуковой тропы." },
+      { id: 1, act: 0, name: "Ронин Тумана", title: "Мечник Реки • Ур. 2", weapon: "Katana", helmet: "ronin", hp: 190, dmg: 20, speed: 5.2, reward: 65, stars: "★☆☆☆☆", defeated: true, lore: "Странствующий самурай с быстрой катаной." },
+      { id: 2, act: 0, name: "Монах Железного Шеста", title: "Адепт Храма • Ур. 3", weapon: "BoStaff", helmet: "monk", hp: 250, dmg: 24, speed: 4.9, reward: 80, stars: "★★☆☆☆", defeated: true, lore: "Вращает шест, сбивая дыхание бойца." },
+      { id: 3, act: 0, name: "Ночной Дозорный", title: "Охотник с Сай • Ур. 4", weapon: "TwinSai", helmet: "ninja", hp: 310, dmg: 28, speed: 4.6, reward: 100, stars: "★★☆☆☆", defeated: false, lore: "Быстрый лазутчик в черной маске." },
+      { id: 4, act: 0, name: "БОСС I: РЫСЬ ТЕНИ", title: "Глава Ордена Когтей • Ур. 5", weapon: "TekkoClaws", helmet: "horned", hp: 420, dmg: 35, speed: 4.2, reward: 220, stars: "☠️ БОСС I", defeated: false, lore: "Повелитель ассасинов Бамбуковой Провинции." },
+
+      { id: 5, act: 1, name: "Ученик Свитков", title: "Страж Библиотеки • Ур. 6", weapon: "TessenFan", helmet: "cone", hp: 480, dmg: 38, speed: 4.1, reward: 130, stars: "★★☆☆☆", defeated: false, lore: "Управляет потоками ветра и туши." },
+      { id: 6, act: 1, name: "Страж Алебарды", title: "Копейщик Врат • Ур. 7", weapon: "Naginata", helmet: "samurai", hp: 550, dmg: 42, speed: 3.9, reward: 150, stars: "★★★☆☆", defeated: false, lore: "Держит круговую оборону с нагинатой." },
+      { id: 7, act: 1, name: "Каллиграф Крови", title: "Мастер Знаков • Ур. 8", weapon: "Katana", helmet: "ronin", hp: 630, dmg: 46, speed: 3.7, reward: 175, stars: "★★★☆☆", defeated: false, lore: "Пишет иероглифы рассечения острием клинка." },
+      { id: 8, act: 1, name: "Незрячий Пророк", title: "Служитель Затмения • Ур. 9", weapon: "Kusarigama", helmet: "monk", hp: 720, dmg: 50, speed: 3.5, reward: 200, stars: "★★★☆☆", defeated: false, lore: "Чувствует малейшее колебание ума противника." },
+      { id: 9, act: 1, name: "БОСС II: ОТШЕЛЬНИК", title: "Владыка Свитков • Ур. 10", weapon: "KamaYari", helmet: "elder", hp: 880, dmg: 58, speed: 3.3, reward: 400, stars: "☠️ БОСС II", defeated: false, lore: "Мудрец, постигший тайну абсолютного счета." },
+
+      { id: 10, act: 2, name: "Молотобоец Додзё", title: "Кузнец Клинка • Ур. 11", weapon: "Odachi", helmet: "samurai", hp: 960, dmg: 62, speed: 3.2, reward: 240, stars: "★★★☆☆", defeated: false, lore: "Испытывает прочность брони ударами Одати." },
+      { id: 11, act: 2, name: "Цепной Палач", title: "Мастер Кусаригамы • Ур. 12", weapon: "Kusarigama", helmet: "ninja", hp: 1050, dmg: 66, speed: 3.1, reward: 270, stars: "★★★★☆", defeated: false, lore: "Захватывает оружие противника стальной цепью." },
+      { id: 12, act: 2, name: "Берсерк Пепла", title: "Воин Туши • Ур. 13", weapon: "TekkoClaws", helmet: "horned", hp: 1160, dmg: 70, speed: 3.0, reward: 300, stars: "★★★★☆", defeated: false, lore: "Атакует непрерывным натиском." },
+      { id: 13, act: 2, name: "Хранитель Наковальни", title: "Железный Самурай • Ур. 14", weapon: "Naginata", helmet: "samurai", hp: 1280, dmg: 75, speed: 2.9, reward: 340, stars: "★★★★☆", defeated: false, lore: "Закован в тяжелые черные доспехи О-ёрой." },
+      { id: 14, act: 2, name: "БОСС III: МЯСНИК СТАЛИ", title: "Полководец • Ур. 15", weapon: "Odachi", helmet: "demon", hp: 1500, dmg: 85, speed: 2.7, reward: 650, stars: "☠️ БОСС III", defeated: false, lore: "Сокрушает землю каждым взмахом двуручного меча." },
+
+      { id: 15, act: 3, name: "Куноити Ветра", title: "Тень Пагоды • Ур. 16", weapon: "TessenFan", helmet: "ninja", hp: 1620, dmg: 88, speed: 2.7, reward: 400, stars: "★★★★☆", defeated: false, lore: "Танцует среди лезвий, оставляя чернильный след." },
+      { id: 16, act: 3, name: "Мастер Сюрикенов", title: "Стрелок Пустоты • Ур. 17", weapon: "ShurikenStorm", helmet: "cone", hp: 1750, dmg: 92, speed: 2.6, reward: 440, stars: "★★★★☆", defeated: false, lore: "Осыпает арену стальными звездами." },
+      { id: 17, act: 3, name: "Кэнсэй Полумесяца", title: "Дуэлянт Башни • Ур. 18", weapon: "Katana", helmet: "samurai", hp: 1900, dmg: 96, speed: 2.5, reward: 490, stars: "★★★★★", defeated: false, lore: "Техника Иайдо быстрее моргания глаза." },
+      { id: 18, act: 3, name: "Архонт Равновесия", title: "Судья Инь-Ян • Ур. 19", weapon: "TwinSai", helmet: "horned", hp: 2080, dmg: 102, speed: 2.4, reward: 550, stars: "★★★★★", defeated: false, lore: "Превращает ошибку в мгновенное поражение." },
+      { id: 19, act: 3, name: "БОСС IV: ГОСПОЖА ВЕТРОВ", title: "Королева Копий • Ур. 20", weapon: "Naginata", helmet: "demon", hp: 2400, dmg: 112, speed: 2.2, reward: 950, stars: "☠️ БОСС IV", defeated: false, lore: "Повелительница Небесной Пагоды." },
+
+      { id: 20, act: 4, name: "Первый Меч Сёгуна", title: "Гвардеец Трона • Ур. 21", weapon: "Odachi", helmet: "samurai", hp: 2650, dmg: 118, speed: 2.2, reward: 650, stars: "★★★★★", defeated: false, lore: "Элитный телохранитель Цитадели Затмения." },
+      { id: 21, act: 4, name: "Тень Безликого", title: "Зеркальный Ронин • Ур. 22", weapon: "Kusarigama", helmet: "ninja", hp: 2900, dmg: 124, speed: 2.1, reward: 720, stars: "★★★★★", defeated: false, lore: "Копирует стиль боя величайших мастеров." },
+      { id: 22, act: 4, name: "Хранитель Печати", title: "Верховный Адепт • Ур. 23", weapon: "KamaYari", helmet: "elder", hp: 3200, dmg: 132, speed: 2.0, reward: 800, stars: "★★★★★", defeated: false, lore: "Владеет древним копьем Кама-Яри." },
+      { id: 23, act: 4, name: "Князь Черного Солнца", title: "Полководец Ночи • Ур. 24", weapon: "Katana", helmet: "horned", hp: 3600, dmg: 140, speed: 1.9, reward: 950, stars: "★★★★★", defeated: false, lore: "Предвестник финального испытания Башни." },
+      { id: 24, act: 4, name: "ФИНАЛ: СЁГУН БЕСКОНЕЧНОСТИ", title: "Владыка Теней • Ур. 25", weapon: "KamaYari", helmet: "shogun", hp: 4500, dmg: 160, speed: 1.8, reward: 2500, stars: "👑 ФИНАЛ", defeated: false, lore: "Абсолютный властелин Дзен и Тьмы." }
+    ];
+
+    let wisdomSeals = 650;
+    let equippedWeaponId = "Katana";
+    let armorySelectedWeaponId = "Katana";
+    let currentActFilter = 0;
+    let selectedLevelIndex = 3;
+
+    // Load Persistent Save from Android localStorage
+    function loadSavedProgress() {
+      try {
+        const raw = localStorage.getItem("SHADOW_MATH_SAVE_V1");
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (typeof data.seals === "number") wisdomSeals = data.seals;
+        if (data.equipped) equippedWeaponId = data.equipped;
+        if (Array.isArray(data.weapons)) {
+          data.weapons.forEach(sw => {
+            const w = weapons.find(x => x.id === sw.id);
+            if (w) { w.level = sw.level; w.isUnlocked = sw.isUnlocked; }
+          });
+        }
+        if (Array.isArray(data.defeatedLevels)) {
+          data.defeatedLevels.forEach(id => {
+            if (levels[id]) levels[id].defeated = true;
+          });
+        }
+      } catch (e) {}
+    }
+
+    function saveProgress() {
+      try {
+        const payload = {
+          seals: wisdomSeals,
+          equipped: equippedWeaponId,
+          weapons: weapons.map(w => ({ id: w.id, level: w.level, isUnlocked: w.isUnlocked })),
+          defeatedLevels: levels.filter(l => l.defeated).map(l => l.id)
+        };
+        localStorage.setItem("SHADOW_MATH_SAVE_V1", JSON.stringify(payload));
+      } catch (e) {}
+    }
+
+    let playerMaxHp = 350, playerHp = 350, bossMaxHp = 310, bossHp = 310;
+    let currentMath = { expr: "14 × 4", answer: 56, limit: 5.5, mult: 1.65 };
+    let typedAnswer = "";
+    let isPlayerStunned = false;
+    let combatTimer = null;
+    let timeLeft = 5.5;
+
+    const animState = {
+      time: 0,
+      playerAction: "idle", playerActionTimer: 0,
+      bossAction: "idle", bossActionTimer: 0,
+      armoryAction: "idle", armoryActionTimer: 0,
+      slashTrails: [], inkDrops: [], embers: []
+    };
+
+    for (let i = 0; i < 28; i++) {
+      animState.embers.push({
+        x: Math.random(), y: Math.random(),
+        r: Math.random() * 2 + 0.8,
+        vx: (Math.random() - 0.5) * 0.0008,
+        vy: -Math.random() * 0.0012 - 0.0004
+      });
+    }
+
+    function drawShadowSamurai(ctx, config) {
+      const { x, y, scale, facing, weaponId, helmetType, action, actionTimer, phaseOffset } = config;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(facing * scale, scale);
+
+      const t = animState.time * 3.2 + phaseOffset;
+      const breath = Math.sin(t) * 2.5;
+
+      let lungeX = 0;
+      let torsoTilt = 0.08 + Math.sin(t * 0.5) * 0.03;
+      let armAngle = -0.35 + Math.sin(t) * 0.08;
+      let forearmAngle = -0.5 + Math.cos(t) * 0.06;
+      let weaponAngle = 0.2;
+
+      if (action === "attack") {
+        const p = 1.0 - (actionTimer / 22);
+        if (p < 0.25) {
+          lungeX = -15 * (p / 0.25); torsoTilt = -0.18; armAngle = -1.6; forearmAngle = -0.8; weaponAngle = -0.6;
+        } else if (p < 0.65) {
+          const sp = (p - 0.25) / 0.4;
+          lungeX = 115 * Math.sin(sp * Math.PI * 0.5); torsoTilt = 0.38; armAngle = 0.65; forearmAngle = 0.25; weaponAngle = 0.95;
+        } else {
+          const rp = (p - 0.65) / 0.35;
+          lungeX = 115 * (1 - rp); torsoTilt = 0.38 * (1 - rp) + 0.08 * rp; armAngle = 0.65 * (1 - rp) - 0.35 * rp;
+        }
+      } else if (action === "hit") {
+        const hp = actionTimer / 14;
+        lungeX = -26 * hp; torsoTilt = -0.32 * hp; armAngle = -0.9 * hp;
+      }
+
+      ctx.translate(lungeX, 0);
+      ctx.fillStyle = "#040404";
+      ctx.strokeStyle = "#FAFAFA";
+      ctx.lineWidth = 2.2;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      // Legs & Armor
+      ctx.beginPath();
+      ctx.moveTo(-8, -56 + breath * 0.4); ctx.lineTo(-26, -28); ctx.lineTo(-14, -26); ctx.lineTo(-2, -52 + breath * 0.4);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(-24, -28); ctx.lineTo(-30, 0); ctx.lineTo(-16, 0); ctx.lineTo(-15, -28);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(8, -56 + breath * 0.4); ctx.lineTo(28, -28); ctx.lineTo(14, -26); ctx.lineTo(-2, -52 + breath * 0.4);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(16, -28); ctx.lineTo(22, 0); ctx.lineTo(36, 0); ctx.lineTo(27, -28);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      // Torso
+      ctx.save();
+      ctx.translate(0, -56 + breath);
+      ctx.rotate(torsoTilt);
+
+      // Scarf
+      ctx.beginPath();
+      const w1 = Math.sin(t * 2.2) * 8, w2 = Math.cos(t * 1.8) * 10;
+      ctx.moveTo(-10, -42); ctx.quadraticCurveTo(-38, -46 + w1, -56, -28 + w2); ctx.quadraticCurveTo(-35, -24 + w1, -12, -32);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      // Kusazuri & Cuirass
+      ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(20, 0); ctx.lineTo(26, 16); ctx.lineTo(-24, 16); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-16, 0); ctx.lineTo(-20, -44); ctx.lineTo(18, -44); ctx.lineTo(16, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      // Head & Helmet
+      ctx.save();
+      ctx.translate(2, -54);
+      ctx.beginPath(); ctx.arc(0, -4, 10, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath(); ctx.moveTo(3, -6); ctx.lineTo(10, -8); ctx.lineTo(9, -4); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#040404";
+
+      if (helmetType === "cone" || helmetType === "ronin") {
+        ctx.beginPath(); ctx.moveTo(-28, -8); ctx.quadraticCurveTo(0, -26, 28, -8); ctx.quadraticCurveTo(0, -13, -28, -8); ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else if (helmetType === "horned" || helmetType === "shogun" || helmetType === "demon") {
+        ctx.beginPath(); ctx.arc(0, -6, 12, Math.PI, 0); ctx.lineTo(16, 2); ctx.lineTo(-16, 2); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(4, -14); ctx.quadraticCurveTo(16, -34, 6, -42); ctx.quadraticCurveTo(24, -32, 10, -14); ctx.closePath(); ctx.fillStyle = "#FFFFFF"; ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.arc(0, -6, 12, Math.PI, 0); ctx.lineTo(15, 1); ctx.lineTo(-15, 1); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(6, -12); ctx.lineTo(16, -24); ctx.lineTo(9, -10); ctx.stroke();
+      }
+      ctx.restore();
+
+      // Arm & Weapon
+      ctx.save();
+      ctx.translate(4, -38);
+      ctx.rotate(armAngle);
+      ctx.beginPath(); ctx.rect(-9, -7, 16, 15); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.rect(-4, 6, 9, 19); ctx.fill(); ctx.stroke();
+      ctx.translate(0, 24);
+      ctx.rotate(forearmAngle);
+      ctx.beginPath(); ctx.rect(-4, 0, 8, 19); ctx.fill(); ctx.stroke();
+      ctx.translate(0, 18);
+      ctx.rotate(weaponAngle);
+      drawEquippedWeaponInHand(ctx, weaponId, t);
+      ctx.restore();
+
+      ctx.restore();
+      ctx.restore();
+    }
+
+    function drawEquippedWeaponInHand(ctx, weaponId, t) {
+      ctx.save();
+      ctx.strokeStyle = "#FFFFFF";
+      ctx.fillStyle = "#FFFFFF";
+      if (weaponId === "Katana" || weaponId === "Odachi") {
+        const len = (weaponId === "Odachi") ? 92 : 68;
+        ctx.lineWidth = 3.5;
+        ctx.beginPath(); ctx.moveTo(0, 12); ctx.lineTo(0, -6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-7, -6); ctx.lineTo(7, -6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-2, -6); ctx.quadraticCurveTo(4, -len * 0.5, 2, -len); ctx.quadraticCurveTo(-3, -len * 0.5, -2, -6); ctx.fill();
+      } else if (weaponId === "BoStaff") {
+        ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.moveTo(0, 48); ctx.lineTo(0, -68); ctx.stroke();
+      } else if (weaponId === "Naginata" || weaponId === "KamaYari") {
+        ctx.lineWidth = 4.5;
+        ctx.beginPath(); ctx.moveTo(0, 35); ctx.lineTo(0, -55); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, -55); ctx.quadraticCurveTo(12, -70, 4, -85); ctx.quadraticCurveTo(-4, -70, 0, -55); ctx.fill();
+      } else if (weaponId === "Kusarigama") {
+        ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(0, -34); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, -32); ctx.quadraticCurveTo(22, -36, 18, -18); ctx.closePath(); ctx.fill();
+      } else if (weaponId === "TessenFan") {
+        ctx.fillStyle = "#080808"; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, 34, -Math.PI * 0.85, -Math.PI * 0.15); ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else if (weaponId === "TekkoClaws" || weaponId === "TwinSai") {
+        ctx.lineWidth = 3;
+        for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.moveTo(i * 4, 0); ctx.lineTo(i * 6, -34); ctx.stroke(); }
+      } else {
+        ctx.rotate(t * 3.5);
+        for (let i = 0; i < 4; i++) {
+          ctx.rotate(Math.PI / 2);
+          ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(5, -5); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
+    function renderDojoScene(canvas, playerWeapon, bossData) {
+      if (!canvas) return;
+      const w = canvas.width = canvas.clientWidth || 680;
+      const h = canvas.height = canvas.clientHeight || 420;
+      const ctx = canvas.getContext('2d');
+
+      const skyGrad = ctx.createRadialGradient(w * 0.5, h * 0.42, 20, w * 0.5, h * 0.45, w * 0.65);
+      skyGrad.addColorStop(0, "#1c1c1c");
+      skyGrad.addColorStop(0.5, "#090909");
+      skyGrad.addColorStop(1, "#000000");
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.save();
+      ctx.fillStyle = "#FAFAFA";
+      ctx.shadowColor = "#FFFFFF";
+      ctx.shadowBlur = 40;
+      ctx.beginPath();
+      ctx.arc(w * 0.5, h * 0.44, h * 0.26, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      const floorY = h * 0.82;
+      ctx.fillStyle = "#030303";
+      ctx.fillRect(0, floorY, w, h - floorY);
+      ctx.strokeStyle = "rgba(255,255,255,0.35)";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, floorY); ctx.lineTo(w, floorY); ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      animState.embers.forEach(e => {
+        e.x += e.vx; e.y += e.vy;
+        if (e.y < 0) e.y = 1;
+        if (e.x < 0) e.x = 1;
+        if (e.x > 1) e.x = 0;
+        ctx.beginPath(); ctx.arc(e.x * w, e.y * h, e.r, 0, Math.PI * 2); ctx.fill();
+      });
+
+      drawShadowSamurai(ctx, {
+        x: w * 0.28, y: floorY + 6, scale: 1.2, facing: 1,
+        weaponId: playerWeapon, helmetType: "samurai",
+        action: animState.playerAction, actionTimer: animState.playerActionTimer, phaseOffset: 0
+      });
+
+      drawShadowSamurai(ctx, {
+        x: w * 0.72, y: floorY + 6, scale: 1.22, facing: -1,
+        weaponId: bossData.weapon, helmetType: bossData.helmet,
+        action: animState.bossAction, actionTimer: animState.bossActionTimer, phaseOffset: 2.1
+      });
+
+      for (let i = animState.slashTrails.length - 1; i >= 0; i--) {
+        const s = animState.slashTrails[i];
+        s.life--;
+        const p = 1 - (s.life / s.maxLife);
+        ctx.save();
+        ctx.strokeStyle = `rgba(255,255,255,${1 - p})`;
+        ctx.lineWidth = (1 - p) * 14;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.radius * (0.6 + p * 0.5), s.startAngle, s.endAngle); ctx.stroke();
+        ctx.restore();
+        if (s.life <= 0) animState.slashTrails.splice(i, 1);
+      }
+
+      for (let i = animState.inkDrops.length - 1; i >= 0; i--) {
+        const d = animState.inkDrops[i];
+        d.x += d.vx; d.y += d.vy; d.vy += 0.25; d.life--;
+        ctx.fillStyle = `rgba(255,255,255,${d.life / 20})`;
+        ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
+        if (d.life <= 0) animState.inkDrops.splice(i, 1);
+      }
+    }
+
+    function spawnStrikeVisuals(targetX, targetY) {
+      animState.slashTrails.push({
+        x: targetX, y: targetY, radius: 75,
+        startAngle: -Math.PI * 0.45, endAngle: Math.PI * 0.45, life: 16, maxLife: 16
+      });
+      for (let i = 0; i < 12; i++) {
+        const ang = Math.random() * Math.PI * 2, spd = Math.random() * 6 + 2;
+        animState.inkDrops.push({ x: targetX, y: targetY, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd - 2, r: 2.5, life: 18 });
+      }
+    }
+
+    function masterTick() {
+      animState.time += 0.016;
+      if (animState.playerActionTimer > 0 && --animState.playerActionTimer === 0) animState.playerAction = "idle";
+      if (animState.bossActionTimer > 0 && --animState.bossActionTimer === 0) animState.bossAction = "idle";
+      if (animState.armoryActionTimer > 0 && --animState.armoryActionTimer === 0) animState.armoryAction = "idle";
+
+      if (!document.getElementById('screenDuel').classList.contains('hidden')) {
+        renderDojoScene(document.getElementById('shadowFightCanvas'), equippedWeaponId, levels[selectedLevelIndex]);
+      }
+      if (!document.getElementById('screenMap').classList.contains('hidden')) {
+        const pCanvas = document.getElementById('mapBossPortraitCanvas');
+        if (pCanvas) {
+          const ctx = pCanvas.getContext('2d');
+          ctx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+          ctx.fillStyle = "#050505"; ctx.fillRect(0, 0, pCanvas.width, pCanvas.height);
+          ctx.fillStyle = "#FAFAFA"; ctx.beginPath(); ctx.arc(140, 75, 45, 0, Math.PI * 2); ctx.fill();
+          const b = levels[selectedLevelIndex];
+          drawShadowSamurai(ctx, { x: 140, y: 142, scale: 1.0, facing: -1, weaponId: b.weapon, helmetType: b.helmet, action: "idle", actionTimer: 0, phaseOffset: 1.0 });
+        }
+      }
+      if (!document.getElementById('screenShop').classList.contains('hidden')) {
+        const aCanvas = document.getElementById('armoryDemoCanvas');
+        if (aCanvas) {
+          const ctx = aCanvas.getContext('2d');
+          ctx.clearRect(0, 0, aCanvas.width, aCanvas.height);
+          ctx.fillStyle = "#050505"; ctx.fillRect(0, 0, aCanvas.width, aCanvas.height);
+          drawShadowSamurai(ctx, { x: 150, y: 150, scale: 1.05, facing: 1, weaponId: armorySelectedWeaponId, helmetType: "samurai", action: animState.armoryAction, actionTimer: animState.armoryActionTimer, phaseOffset: 0 });
+        }
+      }
+      requestAnimationFrame(masterTick);
+    }
+
+    function initCombatLevel() {
+      const b = levels[selectedLevelIndex];
+      playerMaxHp = 350; playerHp = playerMaxHp;
+      bossMaxHp = b.hp; bossHp = bossMaxHp;
+      document.getElementById('uiBossNameText').innerText = b.name.toUpperCase();
+      document.getElementById('uiBossLevelTag').innerText = `УР. ${b.id + 1}/25`;
+      document.getElementById('uiArenaLocationLabel').innerText = `⛩️ ${actNames[b.act]} • ЭТАЖ ${b.id + 1} ИЗ 25`;
+      refreshCombatHpBars();
+      nextMathProblem();
+    }
+
+    function nextMathProblem() {
+      const b = levels[selectedLevelIndex];
+      const w = weapons.find(x => x.id === equippedWeaponId);
+      const rawDiff = 1.2 + (b.id * 0.36);
+      const effDiff = Math.max(w.minCap, rawDiff - (w.level * w.simpFactor));
+
+      let a, c, ans, expr;
+      if (effDiff < 2.2) {
+        a = Math.floor(Math.random() * 22) + 5; c = Math.floor(Math.random() * 18) + 4; ans = a + c; expr = `${a} + ${c}`;
+      } else if (effDiff < 4.0) {
+        a = Math.floor(Math.random() * 12) + 3; c = Math.floor(Math.random() * 9) + 2; ans = a * c; expr = `${a} × ${c}`;
+      } else {
+        if (Math.random() < 0.55) {
+          a = Math.floor(Math.random() * 16) + 4; c = Math.floor(Math.random() * 11) + 3; ans = a * c; expr = `${a} × ${c}`;
+        } else {
+          c = Math.floor(Math.random() * 12) + 3; ans = Math.floor(Math.random() * 14) + 3; a = c * ans; expr = `${a} ÷ ${c}`;
+        }
+      }
+
+      const limit = Math.max(2.6, b.speed + 1.2);
+      const mult = 1.0 + (effDiff * 0.22);
+      currentMath = { expr, answer: ans, limit, mult };
+      document.getElementById('uiMathEquation').innerText = `${expr} = ?`;
+      document.getElementById('uiWeaponBuffLabel').innerText = `Сложность: ${effDiff.toFixed(1)} • Множитель: ×${mult.toFixed(2)}`;
+      clearKeys();
+      startCombatTimer(limit);
+    }
+
+    function startCombatTimer(limit) {
+      if (combatTimer) clearInterval(combatTimer);
+      timeLeft = limit;
+      const fill = document.getElementById('uiTimerBarFill');
+      const txt = document.getElementById('uiRoundTimerText');
+      combatTimer = setInterval(() => {
+        if (isPlayerStunned) return;
+        timeLeft -= 0.1;
+        if (timeLeft <= 0) {
+          clearInterval(combatTimer);
+          timeLeft = 0;
+          performBossAttack();
+        }
+        txt.innerText = `${Math.max(0, timeLeft).toFixed(1)}s`;
+        fill.style.width = `${Math.max(0, (timeLeft / limit) * 100)}%`;
+      }, 100);
+    }
+
+    function pressKey(digit) {
+      if (isPlayerStunned || typedAnswer.length >= 5) return;
+      vibratePhone(15);
+      typedAnswer += digit;
+      document.getElementById('uiAnswerBox').innerText = typedAnswer;
+    }
+
+    function backspaceKey() {
+      if (isPlayerStunned || typedAnswer.length === 0) return;
+      vibratePhone(15);
+      typedAnswer = typedAnswer.slice(0, -1);
+      document.getElementById('uiAnswerBox').innerText = typedAnswer || "_";
+    }
+
+    function clearKeys() {
+      typedAnswer = "";
+      const box = document.getElementById('uiAnswerBox');
+      if (box) box.innerText = "_";
+    }
+
+    function submitStrike() {
+      if (isPlayerStunned || typedAnswer.length === 0) return;
+      const val = parseInt(typedAnswer, 10);
+      if (val === currentMath.answer) {
+        vibratePhone(45);
+        if (combatTimer) clearInterval(combatTimer);
+        const w = weapons.find(x => x.id === equippedWeaponId);
+        const weaponDmg = Math.floor(w.baseDmg * (1 + w.level * w.growthPct));
+        const speedFactor = Math.max(0.2, timeLeft / currentMath.limit);
+        const dmg = Math.max(15, Math.floor(speedFactor * weaponDmg * currentMath.mult));
+        performPlayerStrike(dmg);
+      } else {
+        vibratePhone(120);
+        triggerInkStun();
+      }
+    }
+
+    function performPlayerStrike(damage) {
+      const b = levels[selectedLevelIndex];
+      bossHp = Math.max(0, bossHp - damage);
+      animState.playerAction = "attack"; animState.playerActionTimer = 22;
+      setTimeout(() => {
+        animState.bossAction = "hit"; animState.bossActionTimer = 14;
+        const c = document.getElementById('shadowFightCanvas');
+        if (c) spawnStrikeVisuals(c.width * 0.68, c.height * 0.56);
+      }, 110);
+
+      showCallout(`⚔️ РАССЕЧЕНИЕ: -${damage} HP`);
+      refreshCombatHpBars();
+
+      if (bossHp <= 0) {
+        b.defeated = true;
+        wisdomSeals += b.reward;
+        saveProgress();
+        syncTopBar();
+        setTimeout(() => {
+          alert(`🏆 УРОВЕНЬ ${b.id + 1} ПРОЙДЕН!\nПовержен: ${b.name}\nНаграда: +${b.reward} Печатей Мудрости.`);
+          if (selectedLevelIndex + 1 < levels.length) {
+            selectedLevelIndex++;
+            currentActFilter = levels[selectedLevelIndex].act;
+          }
+          setScreen('map');
+        }, 550);
+      } else {
+        setTimeout(nextMathProblem, 600);
+      }
+    }
+
+    function performBossAttack() {
+      const b = levels[selectedLevelIndex];
+      playerHp = Math.max(0, playerHp - b.dmg);
+      animState.bossAction = "attack"; animState.bossActionTimer = 22;
+      setTimeout(() => {
+        animState.playerAction = "hit"; animState.playerActionTimer = 14;
+        const c = document.getElementById('shadowFightCanvas');
+        if (c) spawnStrikeVisuals(c.width * 0.32, c.height * 0.56);
+      }, 110);
+      showCallout(`💥 УДАР БОССА: -${b.dmg} HP`);
+      refreshCombatHpBars();
+
+      if (playerHp <= 0) {
+        setTimeout(() => {
+          alert("ПОРАЖЕНИЕ В ДУЭЛИ. Улучшите оружие в Оружейной!");
+          setScreen('map');
+        }, 450);
+      } else {
+        setTimeout(nextMathProblem, 600);
+      }
+    }
+
+    function showCallout(text) {
+      const el = document.getElementById('uiCombatCallout');
+      document.getElementById('uiCombatCalloutText').innerText = text;
+      el.style.opacity = "1";
+      setTimeout(() => { el.style.opacity = "0"; }, 650);
+    }
+
+    function refreshCombatHpBars() {
+      document.getElementById('uiPlayerHpText').innerText = `${playerHp} / ${playerMaxHp}`;
+      document.getElementById('uiPlayerHpBar').style.width = `${(playerHp / playerMaxHp) * 100}%`;
+      document.getElementById('uiBossHpText').innerText = `${bossHp} / ${bossMaxHp}`;
+      document.getElementById('uiBossHpBar').style.width = `${(bossHp / bossMaxHp) * 100}%`;
+      const deg = ((playerHp / playerMaxHp) - (bossHp / bossMaxHp)) * 90;
+      document.getElementById('uiYinYangIcon').style.transform = `rotate(${deg}deg)`;
+    }
+
+    function triggerInkStun() {
+      if (isPlayerStunned) return;
+      isPlayerStunned = true;
+      const modal = document.getElementById('uiInkStunModal');
+      const bar = document.getElementById('uiStunBar');
+      modal.style.opacity = "1";
+      bar.style.width = "100%";
+      let rem = 2.0;
+      const st = setInterval(() => {
+        rem -= 0.1;
+        bar.style.width = `${Math.max(0, (rem / 2.0) * 100)}%`;
+        if (rem <= 0) {
+          clearInterval(st);
+          modal.style.opacity = "0";
+          isPlayerStunned = false;
+          clearKeys();
+        }
+      }, 100);
+    }
+
+    function renderCampaignTower() {
+      const actBar = document.getElementById('actTabsContainer');
+      actBar.innerHTML = "";
+      actNames.forEach((_, actIdx) => {
+        const btn = document.createElement('button');
+        const active = (actIdx === currentActFilter);
+        btn.className = `px-2 py-1 rounded-lg text-xs font-bold uppercase ${active ? "bg-white text-black" : "bg-black text-neutral-400 border"}`;
+        btn.innerText = `АКТ ${actIdx + 1}`;
+        btn.onclick = () => {
+          currentActFilter = actIdx;
+          selectedLevelIndex = actIdx * 5;
+          renderCampaignTower();
+        };
+        actBar.appendChild(btn);
+      });
+
+      document.getElementById('mapTotalProgress').innerText = `${levels.filter(l => l.defeated).length} / 25`;
+      const list = document.getElementById('towerListContainer');
+      list.innerHTML = "";
+      levels.filter(l => l.act === currentActFilter).forEach(lvl => {
+        const isSel = (lvl.id === selectedLevelIndex);
+        const card = document.createElement('div');
+        card.className = `p-2.5 rounded-xl border flex items-center justify-between ${isSel ? "active-node-glow" : ""}`;
+        card.style.background = isSel ? "#141414" : "#080808";
+        card.onclick = () => { selectedLevelIndex = lvl.id; renderCampaignTower(); };
+        card.innerHTML = `
+          <div>
+            <span class="text-xs font-bold text-neutral-400">ЭТАЖ ${lvl.id + 1} • ${lvl.stars} ${lvl.defeated ? '✓' : ''}</span>
+            <h4 class="text-sm font-black uppercase text-white">${lvl.name}</h4>
+            <p class="text-xs text-neutral-400">${lvl.title} • ${lvl.hp} HP</p>
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-black text-white">+${lvl.reward} 印</span>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      const cur = levels[selectedLevelIndex];
+      const eq = weapons.find(x => x.id === equippedWeaponId);
+      const effDiff = Math.max(eq.minCap, 1.2 + (cur.id * 0.36) - (eq.level * eq.simpFactor));
+      document.getElementById('dossierFloorTag').innerText = `УРОВЕНЬ ${cur.id + 1} / 25`;
+      document.getElementById('dossierRewardTag').innerText = `+${cur.reward} 印`;
+      document.getElementById('dossierStars').innerText = cur.stars;
+      document.getElementById('dossierStatus').innerText = cur.defeated ? "ПРОЙДЕН" : "ВЫЗОВ";
+      document.getElementById('dossierName').innerText = cur.name;
+      document.getElementById('dossierTitle').innerText = cur.title;
+      document.getElementById('dossierLore').innerText = cur.lore;
+      document.getElementById('dossierHp').innerText = `${cur.hp} HP`;
+      document.getElementById('dossierSpeed').innerText = `${cur.speed.toFixed(1)} сек`;
+      document.getElementById('dossierDmg').innerText = `${cur.dmg} ед.`;
+      document.getElementById('dossierDiff').innerText = `${effDiff.toFixed(1)}`;
+    }
+
+    function launchSelectedLevel() { setScreen('duel'); }
+
+    function renderArmory() {
+      const grid = document.getElementById('armoryGridContainer');
+      grid.innerHTML = "";
+      weapons.forEach(w => {
+        const isSel = (w.id === armorySelectedWeaponId);
+        const isEq = (w.id === equippedWeaponId);
+        const dmg = Math.floor(w.baseDmg * (1 + w.level * w.growthPct));
+        const card = document.createElement('div');
+        card.className = `p-2.5 rounded-xl border flex flex-col justify-between ${isSel ? "active-node-glow" : ""}`;
+        card.style.background = isSel ? "#141414" : "#080808";
+        card.onclick = () => { armorySelectedWeaponId = w.id; renderArmory(); triggerArmoryDemoStrike(); };
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase text-white">${w.name}</span>
+            ${isEq ? '<span class="px-2 py-1 bg-white text-black text-xs font-black rounded">ЭКИП</span>' : ''}
+          </div>
+          <div class="text-xs text-neutral-400">
+            ${w.isUnlocked ? `Ур. ${w.level}/25 • Урон ${dmg}` : `🔒 ${w.baseCost} 印`}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      const w = weapons.find(x => x.id === armorySelectedWeaponId);
+      const isEq = (w.id === equippedWeaponId);
+      const dmg = Math.floor(w.baseDmg * (1 + w.level * w.growthPct));
+      const upCost = w.baseCost + ((w.level + 1) * w.stepCost);
+
+      document.getElementById('armoryClassTag').innerText = w.category;
+      document.getElementById('armoryWeaponTitle').innerText = w.name;
+      document.getElementById('armoryLevelBadge').innerText = w.isUnlocked ? `УР. ${w.level}/25` : "ЗАКРЫТО";
+      document.getElementById('armoryWeaponDesc').innerText = w.desc;
+      document.getElementById('armoryStatDmg').innerText = `${dmg} ед.`;
+      document.getElementById('armoryStatSimp').innerText = `-${(w.level * w.simpFactor).toFixed(2)}`;
+      document.getElementById('armoryStatCap').innerText = `${w.minCap}`;
+
+      const actRow = document.getElementById('armoryActionRow');
+      if (!w.isUnlocked) {
+        actRow.innerHTML = `<button onclick="buyWeapon('${w.id}')" class="sf-strike-btn w-full py-2.5 rounded-xl text-xs font-black uppercase">🔓 КУПИТЬ (${w.baseCost} 印)</button>`;
+      } else {
+        actRow.innerHTML = `
+          ${!isEq ? `<button onclick="equipWeaponNow('${w.id}')" class="flex-1 py-2.5 bg-black text-white border rounded-xl text-xs font-bold uppercase">ВЗЯТЬ</button>` : ''}
+          <button onclick="upgradeWeaponNow('${w.id}')" class="sf-strike-btn flex-1 py-2.5 rounded-xl text-xs font-black uppercase">
+            ${w.level < w.maxLevel ? `⬆ УЛУЧШИТЬ (${upCost} 印)` : 'МАКС. УР. 25'}
+          </button>
+        `;
+      }
+    }
+
+    function triggerArmoryDemoStrike() { animState.armoryAction = "attack"; animState.armoryActionTimer = 22; }
+
+    function buyWeapon(id) {
+      const w = weapons.find(x => x.id === id);
+      if (wisdomSeals < w.baseCost) { alert("Недостаточно Печатей Мудрости!"); return; }
+      wisdomSeals -= w.baseCost; w.isUnlocked = true; w.level = 1; equippedWeaponId = w.id;
+      saveProgress(); syncTopBar(); renderArmory();
+    }
+
+    function equipWeaponNow(id) {
+      equippedWeaponId = id; saveProgress(); syncTopBar(); renderArmory();
+    }
+
+    function upgradeWeaponNow(id) {
+      const w = weapons.find(x => x.id === id);
+      if (w.level >= w.maxLevel) return;
+      const cost = w.baseCost + ((w.level + 1) * w.stepCost);
+      if (wisdomSeals < cost) { alert("Недостаточно Печатей Мудрости!"); return; }
+      wisdomSeals -= cost; w.level++;
+      saveProgress(); syncTopBar(); renderArmory();
+    }
+
+    function setScreen(screen) {
+      document.getElementById('screenDuel').classList.toggle('hidden', screen !== 'duel');
+      document.getElementById('screenMap').classList.toggle('hidden', screen !== 'map');
+      document.getElementById('screenShop').classList.toggle('hidden', screen !== 'shop');
+      document.getElementById('screenLan').classList.toggle('hidden', screen !== 'lan');
+
+      const btns = { duel: 'navBtnDuel', map: 'navBtnMap', shop: 'navBtnShop', lan: 'navBtnLan' };
+      Object.keys(btns).forEach(k => {
+        const el = document.getElementById(btns[k]);
+        el.className = (k === screen)
+          ? "px-3 py-1.5 rounded-lg text-xs font-black uppercase bg-white text-black"
+          : "px-3 py-1.5 rounded-lg text-xs font-black uppercase bg-black text-neutral-300";
+      });
+
+      if (combatTimer) clearInterval(combatTimer);
+      if (screen === 'duel') initCombatLevel();
+      if (screen === 'map') renderCampaignTower();
+      if (screen === 'shop') renderArmory();
+    }
+
+    function syncTopBar() {
+      document.getElementById('topSealsCount').innerText = wisdomSeals;
+      const eq = weapons.find(x => x.id === equippedWeaponId);
+      document.getElementById('topWeaponBadge').innerText = `${eq.name} [Ур.${eq.level}/25]`;
+      document.getElementById('topDiscountVal').innerText = `-${(eq.level * eq.simpFactor).toFixed(2)}`;
+      document.getElementById('topCapVal').innerText = eq.minCap.toFixed(1);
+    }
+
+    function startLanHostSim() {
+      const rName = document.getElementById('lanRoomName').value || "Додзё";
+      document.getElementById('lanStatusLog').innerText = `[Netcode Host] Комната '${rName}' открыта на 0.0.0.0:7777...`;
+    }
+
+    loadSavedProgress();
+    syncTopBar();
+    initCombatLevel();
+    requestAnimationFrame(masterTick);
+  </script>
+</body>
+</html>
